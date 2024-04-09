@@ -43,9 +43,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Add third party apps
+    'crispy_forms',
+    'crispy_bootstrap5',
     # Add the website app to the installed apps
     'website',
+    # Add the auth_app to the installed apps
+    'auth_app',
 ]
+
+# Add the crispy_forms settings to the settings.py file
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
