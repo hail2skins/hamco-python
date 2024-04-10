@@ -25,4 +25,7 @@ urlpatterns = [
     
     # Include the urls from the auth_app
     path('auth/', include('auth_app.urls')),
+    
+    # Include the urls from the notes app
+    path('notes/', include('notes.urls')),
 ]

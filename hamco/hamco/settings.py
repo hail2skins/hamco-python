@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'website',
     # Add the auth_app to the installed apps
     'auth_app',
+    # Add the notes app to the installed apps
+    'notes',
 ]
 
 # Add the crispy_forms settings to the settings.py file
@@ -79,6 +81,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Add the context_processors file to the TEMPLATES setting
+                'website.context_processors.common_context',
             ],
         },
     },
