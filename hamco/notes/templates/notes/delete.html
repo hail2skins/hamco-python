@@ -1,0 +1,15 @@
+{% extends 'website/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Delete Note</h1>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <button type="submit" class="btn btn-danger">Delete Note</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

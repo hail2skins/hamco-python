@@ -1,5 +1,7 @@
 {% extends 'website/base.html' %}
 
+{% load static %}
+
 {% block content %}
 <!-- Place table in a bootstrap container spanning one cell short of full page -->
 <div class="row justify-content-center">
@@ -15,6 +17,7 @@
                     <th scope="col" style="width: 10%;">Published</th>
                     {% if user.is_authenticated %}
                         <th scope="col" style="width: 10%;">Update</th>
+                        <th scope="col" style="width: 10%;">Delete</th>
                     {% endif %}
                 </tr>
             </thead>
@@ -26,6 +29,7 @@
                     <td>{{ note.created_at|date:"m/d/Y" }}</td>
                     {% if user.is_authenticated %}
                         <td><a class="btn btn-outline-primary" href="{% url 'update' note.id %}" role="button">Update</a></td>
+                        <td><a class="btn btn-outline-danger" href="{% url 'delete' note.id %}" role="button">Delete</a></td>
                     {% endif %}
                 </tr>
                 {% empty %}

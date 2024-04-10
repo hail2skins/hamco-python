@@ -13,5 +13,7 @@ urlpatterns = [
     path('details/<int:pk>', views.details, name='details'),
     # Path to the update view of a note
     path('update/<int:pk>', views.update, name='update'),
+    # Path to the delete view of a note
+    path('delete/<int:pk>', views.delete, name='delete'),
     
 ]
