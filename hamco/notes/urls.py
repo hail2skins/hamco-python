@@ -11,5 +11,7 @@ urlpatterns = [
     path('history', views.notes, name='history'),
     # Path to the details view of a note
     path('details/<int:pk>', views.details, name='details'),
+    # Path to the update view of a note
+    path('update/<int:pk>', views.update, name='update'),
     
 ]
