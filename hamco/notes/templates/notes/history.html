@@ -13,6 +13,9 @@
                     <th scope="col" style="width: 20%;">Title</th>
                     <th scope="col" style="width: 50%;">Content</th>
                     <th scope="col" style="width: 10%;">Published</th>
+                    {% if user.is_authenticated %}
+                        <th scope="col" style="width: 10%;">Update</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +24,9 @@
                     <td><a href="{% url 'details' note.id %}"> {{ note.title }}</a></td>
                     <td>{{ note.content|truncatewords:30 }}</td>
                     <td>{{ note.created_at|date:"m/d/Y" }}</td>
+                    {% if user.is_authenticated %}
+                        <td><a class="btn btn-outline-primary" href="{% url 'update' note.id %}" role="button">Update</a></td>
+                    {% endif %}
                 </tr>
                 {% empty %}
                 <tr>
