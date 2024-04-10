@@ -44,7 +44,7 @@ def create(request):
             note.save()
             
             # Redirect the user to the home page
-            return redirect('')
+            return redirect('history')
     
     # Context dictionary to pass the form to the template
     context = {
@@ -52,3 +52,20 @@ def create(request):
     }
     
     return render(request, 'notes/create.html', context)
+
+# Create the notes view
+# This view will have a list of all notes showing Title, Content and Created_at
+# Created at will be formated to show month, day and year only
+# Content will be truncated to 30 words
+# This will be shown in a bootstrap striped table
+def notes(request):
+    
+    # Retrieve all notes
+    notes = Note.objects.all()
+    
+    # Context dictionary to pass the notes to the template
+    context = {
+        'notes': notes
+    }
+    
+    return render(request, 'notes/history.html', context)

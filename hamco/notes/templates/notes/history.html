@@ -1,0 +1,36 @@
+{% extends 'website/base.html' %}
+
+{% block content %}
+<!-- Place table in a bootstrap container spanning one cell short of full page -->
+<div class="row justify-content-center">
+    <div class="col-11">
+        
+        <h1 class="text-center">Deep Thoughts</h1>
+        <!-- Your notes go here -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Content </th>
+                    <th scope="col">Published</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for note in notes %}
+                <tr>
+                    <td>{{ note.title }}</td>
+                    <td>{{ note.content }}</td>
+                    <td>{{ note.published }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No history found. </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+ 
+ 
+{% endblock %}
