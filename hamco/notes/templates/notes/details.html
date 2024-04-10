@@ -5,7 +5,13 @@
         <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
-                    {{ note }}
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'update' note.id %}" class="btn btn-primary">Update</a>
+
+                        <br><br>
+                        
+                    {% endif %}
+                    {{ note.content }}
                     
                 </div>
             </div>
