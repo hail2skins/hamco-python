@@ -5,8 +5,10 @@ def home(request):
 
     # Context dictionary
     context = {
-        'title': 'Hamco IS',
+        'title': 'Hamco Internet Solutions',
         'company': 'Hamco Internet Solutions',
+        'heading': 'Stuff I Talk About',
+        'subheading': 'That will not get me fired.',
     }
 
     return render(request, 'website/index.html', context)

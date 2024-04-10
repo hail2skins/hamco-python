@@ -48,7 +48,9 @@ def create(request):
     
     # Context dictionary to pass the form to the template
     context = {
-        'form': form
+        'form': form,
+        'heading': 'Tell it',
+        'subheading': 'The most interesting thing you will ever say.',
     }
     
     return render(request, 'notes/create.html', context)
@@ -65,7 +67,34 @@ def notes(request):
     
     # Context dictionary to pass the notes to the template
     context = {
-        'notes': notes
+        'notes': notes,
+        'heading': 'The Mother Load',
+        'subheading': 'All the stuff I have ever said.',
     }
     
     return render(request, 'notes/history.html', context)
+
+# Create the details view
+# This view will show the details of a note with the title, content, created_at
+# Created at will be formated to show month, day and year only
+# This view will need to be dynamic and take a note id as a parameter
+def details(request, pk):
+    
+    # try/except block to handle the case where the note does not exist
+    try:
+        # get the note by primary key
+        note = Note.objects.get(id=pk)
+    except Note.DoesNotExist:
+        # If the note does not exist redirect to the history page
+        return redirect('history')
+    
+    # Context dictionary to pass the note to the template
+    context = {
+        'note': note,
+        'heading': note.title,
+        'subheading': 'Dare to be this great.',
+        'view': 'details',
+    }
+    
+    # Render the details template with the context
+    return render(request, 'notes/details.html', context)

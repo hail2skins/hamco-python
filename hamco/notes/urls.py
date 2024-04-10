@@ -9,5 +9,7 @@ urlpatterns = [
     path('create', views.create, name='create'),
     # Path to the notes view
     path('history', views.notes, name='history'),
+    # Path to the details view of a note
+    path('details/<int:pk>', views.details, name='details'),
     
 ]
