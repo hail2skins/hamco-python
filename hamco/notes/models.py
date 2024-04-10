@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 # Import markdown
 import markdown
 
+# importing BeautifulSoup to convert from html markdown to text for the history page
+from bs4 import BeautifulSoup
+
 # Create your models here.
 '''
 Create the Note model
@@ -34,3 +37,13 @@ class Note(models.Model):
     # Utilizing markdown as imported above
     def content_as_html(self):
         return markdown.markdown(self.content, extensions=['fenced_code', 'codehilite'], extension_configs={'codehilite': {'use_pygments': False}})
+    
+   # content_as_text method
+    # This method will return the content as text
+    # Utilizing BeautifulSoup as imported above
+    # to remove the markdown from the raw content allowing it to look better in the table
+    def content_as_text(self):
+        html_content = self.content_as_html()
+        soup = BeautifulSoup(html_content, "html.parser")
+        plain_text_content = soup.get_text()
+        return plain_text_content

@@ -25,11 +25,16 @@
                 {% for note in notes %}
                 <tr>
                     <td><a href="{% url 'details' note.id %}"> {{ note.title }}</a></td>
-                    <td>{{ note.content|truncatewords:30 }}</td>
+                    <td>{{ note.content_as_text|truncatewords:20 }}</td>
                     <td>{{ note.created_at|date:"m/d/Y" }}</td>
                     {% if user.is_authenticated %}
                         <td><a class="btn btn-outline-primary" href="{% url 'update' note.id %}" role="button">Update</a></td>
-                        <td><a class="btn btn-outline-danger" href="{% url 'delete' note.id %}" role="button">Delete</a></td>
+                        <td>
+                            <form action="{% url 'delete' note.id %}" method="post" class="delete-form d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
                     {% endif %}
                 </tr>
                 {% empty %}

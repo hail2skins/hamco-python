@@ -12,10 +12,10 @@
                 <!-- Post preview-->
                 {% for note in latest_notes %}
                 <div class="post-preview">
-                    <a href="post.html">
+                    
                         <h2 class="post-title">{{ note.title }}</h2>
-                        <h3 class="post-subtitle">{{ note.content|truncatewords:50}}</h3>
-                    </a>
+                        <h3 class="post-subtitle">{{ note.content_as_html|safe|truncatewords:50}}</h3>
+                    
                     <p class="post-meta">
                         Posted by
                         <a href="#!">Art Mills</a>
