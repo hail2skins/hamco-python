@@ -92,10 +92,6 @@
   }
 }
 
-.navbar .logout-link {
-  color: red;
-}
-
 
 body {
   margin: 0;
@@ -303,6 +299,9 @@ kbd,
 samp {
   font-family: var(--bs-font-monospace);
   font-size: 1em;
+  direction: ltr;
+  /* rtl:ignore */
+  unicode-bidi: bidi-override;
 }
 
 pre {
@@ -311,6 +310,16 @@ pre {
   margin-bottom: 1rem;
   overflow: auto;
   font-size: 0.875em;
+  white-space: pre-wrap;
+  /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */
 }
 
 pre code {
@@ -320,9 +329,20 @@ pre code {
 }
 
 code {
-  font-size: 0.875em;
-  color: var(--bs-code-color);
-  word-wrap: break-word;
+  font-family: Monaco, monospace;
+  line-height: 100%;
+  background-color: #272822 !important;
+  padding: 0.2em;
+  letter-spacing: -0.05em;
+  word-break: normal;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0;
+  white-space: pre;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  color: lightblue;
+  /* Change the color here */
 }
 
 a>code {

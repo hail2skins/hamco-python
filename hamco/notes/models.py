@@ -3,6 +3,9 @@ from django.db import models
 # Import django User model
 from django.contrib.auth.models import User
 
+# Import markdown
+import markdown
+
 # Create your models here.
 '''
 Create the Note model
@@ -25,3 +28,9 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
+    
+    # content_as_html method
+    # This method will return the content as HTML
+    # Utilizing markdown as imported above
+    def content_as_html(self):
+        return markdown.markdown(self.content, extensions=['fenced_code', 'codehilite'], extension_configs={'codehilite': {'use_pygments': False}})
