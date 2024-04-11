@@ -85,6 +85,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Add the context_processors file to the TEMPLATES setting
                 'website.context_processors.common_context',
+                # Add the random_slogan context processor to the TEMPLATES setting
+                'website.context_processors.random_slogan',
             ],
         },
     },

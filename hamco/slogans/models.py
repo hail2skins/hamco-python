@@ -1,5 +1,8 @@
 from django.db import models
 
+# import random module for slogan randomization
+import random
+
 # Import django user model
 from django.contrib.auth.models import User
 
@@ -16,3 +19,8 @@ class Slogan(models.Model):
     
     def __str__(self):
         return self.slogan
+    
+    @classmethod
+    def get_random(cls):
+        slogans = cls.objects.all()
+        return random.choice(slogans) if slogans else None

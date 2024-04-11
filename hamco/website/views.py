@@ -4,7 +4,6 @@ from django.shortcuts import render
 # Note models are in the notes app, not the website app
 from notes.models import Note
 
-
 # Create your views here.
 def home(request):
     
@@ -16,7 +15,6 @@ def home(request):
         'title': 'Hamco Internet Solutions',
         'company': 'Hamco Internet Solutions',
         'heading': 'Stuff I Talk About',
-        'subheading': 'That will not get me fired.',
         'latest_notes': latest_notes,
     }
 

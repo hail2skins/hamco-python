@@ -50,7 +50,6 @@ def create(request):
     context = {
         'form': form,
         'heading': 'Tell it',
-        'subheading': 'The most interesting thing you will ever say.',
     }
     
     return render(request, 'notes/create.html', context)
@@ -69,7 +68,7 @@ def notes(request):
     context = {
         'notes': notes,
         'heading': 'The Mother Load',
-        'subheading': 'All the stuff I have ever said.',
+        
     }
     
     return render(request, 'notes/history.html', context)
@@ -79,7 +78,7 @@ def notes(request):
 # Created at will be formated to show month, day and year only
 # This view will need to be dynamic and take a note id as a parameter
 def details(request, pk):
-    
+        
     # try/except block to handle the case where the note does not exist
     try:
         # get the note by primary key
@@ -92,7 +91,6 @@ def details(request, pk):
     context = {
         'note': note,
         'heading': note.title,
-        'subheading': 'Dare to be this great.',
         'view': 'details',
     }
     
