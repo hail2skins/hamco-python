@@ -87,6 +87,8 @@ TEMPLATES = [
                 'website.context_processors.common_context',
                 # Add the random_slogan context processor to the TEMPLATES setting
                 'website.context_processors.random_slogan',
+                # Add the random_image context processor to the TEMPLATES setting
+                'website.context_processors.random_image',
             ],
         },
     },
