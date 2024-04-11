@@ -28,4 +28,5 @@ urlpatterns = [
     
     # Include the urls from the notes app
     path('notes/', include('notes.urls')),
+    
 ]

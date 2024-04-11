@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'auth_app',
     # Add the notes app to the installed apps
     'notes',
+    # Add the slogans app to the installed apps
+    'slogans',
 ]
 
 # Add the crispy_forms settings to the settings.py file
