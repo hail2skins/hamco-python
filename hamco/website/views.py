@@ -20,3 +20,11 @@ def home(request):
 
     return render(request, 'website/index.html', context)
 
+# About view
+def about(request):
+    context = {
+        'heading': 'I knew you were curious!',
+    }
+
+    return render(request, 'website/about.html', context)
+

@@ -6,5 +6,7 @@ from . import views
 urlpatterns = [
         
     # Path to the home view
-    path("", views.home, name="")
+    path("", views.home, name=""),
+    # Path to the about view
+    path("about/", views.about, name="about"),
 ]
