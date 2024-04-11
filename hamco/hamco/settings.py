@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'notes',
     # Add the slogans app to the installed apps
     'slogans',
+
 ]
 
 # Add the crispy_forms settings to the settings.py file
@@ -177,3 +178,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 # Override the default logout redirect
 LOGOUT_REDIRECT_URL = '/auth/login'
+
+
