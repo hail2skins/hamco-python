@@ -22,7 +22,7 @@ class TemplateTest(BaseTest):
     def test_homepage_contains_expected_content(self):
         response = self.client.get('/')
         # debug print
-        print(response.content)
+        #print(response.content)
         
         # Simple assertions
         self.assertContains(response, '<title>Hamco Internet Solutions</title>', html=True)
