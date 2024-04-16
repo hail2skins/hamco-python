@@ -29,4 +29,7 @@ urlpatterns = [
     # Include the urls from the notes app
     path('notes/', include('notes.urls')),
     
+    # Include the urls from the donors app
+    path('donors/', include('donors.urls')),
+    
 ]

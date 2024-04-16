@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'notes',
     # Add the slogans app to the installed apps
     'slogans',
+    # Add the donors app to the installed apps
+    'donors',
 
 ]
 
