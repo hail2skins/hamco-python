@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm, LoginForm
 from .mail import send_email
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth import views as auth_views
+# import settings
+from django.conf import settings
+
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
 
 # import django auth views to add context menu
@@ -34,6 +39,8 @@ def login_view(request):
     extra_context = {
         'title': 'Hamco IS',
         'company': 'Hamco Internet Solutions',
+        'heading': 'Come in. It is cozy in here.',
+        
         'form': form,
     }
     return render(request, 'registration/login.html', extra_context)
@@ -46,8 +53,8 @@ def register(request):
             user = form.save()
             
             # Send a welcome email
-            from_email = "art@hamcois.com"
-            from_name = "Art Mills"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            from_name = settings.DEFAULT_FROM_NAME
             to_email = user.email
             subject = "Welcome to Hamco Internet Solutions"
             text_content = "Thank you for registering."
@@ -58,3 +65,50 @@ def register(request):
     else:
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'registration/password_reset.html'
+    email_template_name = 'registration/password_reset_email.html'
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm.html'
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'registration/password_reset_complete.html'
+
+# class PasswordResetView(auth_views.PasswordResetView):
+#     template_name = 'registration/password_reset.html'
+#     success_url = '/auth/password_reset/done'
+
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['heading'] = 'Forgot something, did we?'
+#         return context
+
+# class PasswordResetDoneView(auth_views.PasswordResetDoneView):
+#     template_name = 'registration/password_reset_done.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['heading'] = 'Check your email, even spam maybe'
+#         return context
+
+# class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+#     template_name = 'registration/password_reset_confirm.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['heading'] = 'Fill that out. Check it twice.'
+#         return context
+
+# class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+#     template_name = 'registration/password_reset_complete.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['heading'] = 'All done. You can login now.'
+#         return context

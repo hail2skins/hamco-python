@@ -41,6 +41,9 @@ CSRF_TRUSTED_ORIGINS = env.list('DJANGO_CSRF_TRUSTED_ORIGINS', default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    # Add the auth_app to the installed apps
+    'auth_app',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,8 +55,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     # Add the website app to the installed apps
     'website',
-    # Add the auth_app to the installed apps
-    'auth_app',
     # Add the notes app to the installed apps
     'notes',
     # Add the slogans app to the installed apps
@@ -82,7 +83,7 @@ ROOT_URLCONF = 'hamco.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # Necessary for templating
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -182,5 +183,11 @@ LOGOUT_REDIRECT_URL = '/auth/login'
 # Mailjet settings/secrets
 MAILJET_API_KEY = env('MAILJET_API_KEY')
 MAILJET_API_SECRET = env('MAILJET_API_SECRET')
+
+# Email backend to send registration emails using Mailjet
+EMAIL_BACKEND = 'auth_app.mail_backend.MailjetEmailBackend'
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+DEFAULT_FROM_NAME = env('DEFAULT_FROM_NAME')
+
 
 
