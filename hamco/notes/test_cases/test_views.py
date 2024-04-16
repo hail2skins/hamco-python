@@ -18,6 +18,12 @@ class CreateViewTest(BaseTest):
     def test_create_view_uses_correct_template(self):
         response = self.client.get(reverse('create'))
         self.assertTemplateUsed(response, 'notes/create.html')
+        
+    # Failure test for testuser2 being redirected to root page if attempting to create a note
+    def test_create_view_redirects_for_wrong_user(self):
+        self.client.login(username='testuser2', password='12345')
+        response = self.client.get(reverse('create'))
+        self.assertRedirects(response, reverse(''))
 
     # This test method checks that the create view creates a new note when it receives a valid POST request.
     def test_create_view_creates_new_note(self):
@@ -111,8 +117,16 @@ class UpdateViewTest(BaseTest):
     def test_update_view_uses_correct_template(self):
         response = self.client.get(reverse('update', args=[self.note.id]))
         self.assertTemplateUsed(response, 'notes/update.html')
+        
+    # Failure test for user2 being redirected to root page if attempting to update a note of user1
+    def test_update_view_redirects_for_wrong_user(self):
+        self.client.login(username='testuser2', password='12345')
+        response = self.client.get(reverse('update', args=[self.note.id]))
+        #
+        # print(response.wsgi_request.user)
+        self.assertRedirects(response, reverse(''))
 
-    def test_update_view_redorects_for_invalid_note_id(self):
+    def test_update_view_redirects_for_invalid_note_id(self):
         invalid_note_id = self.user.note_set.last().id + 1
         response = self.client.get(reverse('update', args=[invalid_note_id]))
         self.assertRedirects(response, reverse('history'))
@@ -147,9 +161,9 @@ class DeleteViewTest(BaseTest):
 
     def test_delete_view_redirects_for_wrong_user(self):
         # Try to delete the second user's note as the first user
-        self.client.login(username='testuser', password='12345')
-        response = self.client.post(reverse('delete', args=[self.note2.id]))
-        self.assertRedirects(response, reverse('history'))
+        self.client.login(username='testuser2', password='12345')
+        response = self.client.post(reverse('delete', args=[self.note.id]))
+        self.assertRedirects(response, reverse(''))
 
     def test_delete_view_deletes_note(self):
         response = self.client.post(reverse('delete', args=[self.note.id]))

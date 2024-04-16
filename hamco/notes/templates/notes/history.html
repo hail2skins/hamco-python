@@ -27,7 +27,7 @@
                     <td><a href="{% url 'details' note.id %}"> {{ note.title }}</a></td>
                     <td>{{ note.content_as_text|truncatewords:20 }}</td>
                     <td>{{ note.created_at|date:"m/d/Y" }}</td>
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and user.is_superuser %}
                         <td><a class="btn btn-outline-primary" href="{% url 'update' note.id %}" role="button">Update</a></td>
                         <td>
                             <form action="{% url 'delete' note.id %}" method="post" class="delete-form d-inline">

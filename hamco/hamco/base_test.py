@@ -11,7 +11,7 @@ class BaseTest(TestCase):
     def setUpTestData(cls):
         # model_bakery randomizes things like content, text, slogan in models so you can keep it short.
         # Create a user
-        cls.user = baker.make(User, username='testuser')
+        cls.user = baker.make(User, username='testuser', is_superuser=True)
         cls.user.set_password('12345')  # Set the password explicitly
         cls.user.save()
 
@@ -27,6 +27,6 @@ class BaseTest(TestCase):
         cls.user2.set_password('12345')
         cls.user2.save()
         
-        # Create 1 note for the second user
-        cls.note2 = baker.make(Note, user=cls.user2)
+        # Create 1 note for the second user -- NOT POSSIBLE NOW AS USER IS NOT SUPERUSER
+        # cls.note2 = baker.make(Note, user=cls.user2)
         

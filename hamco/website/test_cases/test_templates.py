@@ -26,7 +26,7 @@ class TemplateTest(BaseTest):
         
         # Simple assertions
         self.assertContains(response, '<title>Hamco Internet Solutions</title>', html=True)
-        self.assertContains(response, '<a class="navbar-brand" href="index.html">Hamco Internet Solutions</a>', html=True)
+        self.assertContains(response, '<a class="navbar-brand" href="/">Hamco Internet Solutions</a>', html=True)
         self.assertContains(response, '<h1>Stuff I Talk About</h1>', html=True)
         
         # Query all notes ordering by created at for most recent
@@ -48,7 +48,7 @@ class TemplateTest(BaseTest):
         
         # simple assertions
         self.assertContains(response, '<title>Hamco Internet Solutions</title>', html=True)
-        self.assertContains(response, '<a class="navbar-brand" href="index.html">Hamco Internet Solutions</a>', html=True)
+        self.assertContains(response, '<a class="navbar-brand" href="/">Hamco Internet Solutions</a>', html=True)
         self.assertContains(response, '<h1>I knew you were curious!</h1>', html=True)
         
         # Test if the page contains any of the slogans text from any of the possible slogans

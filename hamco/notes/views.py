@@ -21,6 +21,9 @@ from django.contrib.auth.models import User
 # This decorator will redirect the user to the login page if they are not authenticated
 @login_required(login_url='login')
 def create(request):
+    # Protect the view from non-superusers allowing for other apps to be accessed by non-superusers
+    if not request.user.is_superuser:
+        return redirect('')
     
     # Create a form instance from the NoteForm class
     form = NoteForm()
@@ -102,48 +105,51 @@ def details(request, pk):
 # This view will need to be dynamic and take a note id as a parameter
 # This view will be protected by the login_required decorator
 @login_required(login_url='login')
-def update(request, pk):
+def update(request, pk):  
+    # try/except block to handle the case where the note does not exist
+    try:
+        # get the note by primary key
+        note = Note.objects.get(id=pk)
+        # Protect the view from non-superusers allowing for other apps to be accessed by non-superusers and also to request.user
+        if note.user != request.user and not request.user.is_superuser:
+            return redirect('')
+    
+    except Note.DoesNotExist:
+         # If the note does not exist redirect to the history page
+        return redirect('history')
         
-        # try/except block to handle the case where the note does not exist
-        try:
-            # get the note by primary key
-            note = Note.objects.get(id=pk)
-        except Note.DoesNotExist:
-            # If the note does not exist redirect to the history page
+    # Check if the note user is not the current user
+    if note.user != request.user:
+         # If the note user is not the current user redirect to the history page
+        return redirect('history')
+        
+    # Create a form instance from the NoteForm class with the instance of the note
+    form = NoteForm(instance=note)
+        
+    # Check if the request method is POST
+    if request.method == 'POST':
+            
+        # Create a form instance from the NoteForm class with the data from the POST request and the instance of the note
+        form = NoteForm(request.POST, instance=note)
+            
+        # Check if the form is valid
+        if form.is_valid():
+                
+            # Save the form
+            form.save()
+                
+            # Redirect the user to the history page
             return redirect('history')
         
-        # Check if the note user is not the current user
-        if note.user != request.user:
-            # If the note user is not the current user redirect to the history page
-            return redirect('history')
+    # Context dictionary to pass the form to the template
+    context = {
+        'form': form,
+        'heading': 'It wasn not quite right?',
+        'subheading': 'Make it better.',
+    }
         
-        # Create a form instance from the NoteForm class with the instance of the note
-        form = NoteForm(instance=note)
-        
-        # Check if the request method is POST
-        if request.method == 'POST':
-            
-            # Create a form instance from the NoteForm class with the data from the POST request and the instance of the note
-            form = NoteForm(request.POST, instance=note)
-            
-            # Check if the form is valid
-            if form.is_valid():
-                
-                # Save the form
-                form.save()
-                
-                # Redirect the user to the history page
-                return redirect('history')
-        
-        # Context dictionary to pass the form to the template
-        context = {
-            'form': form,
-            'heading': 'It wasn not quite right?',
-            'subheading': 'Make it better.',
-        }
-        
-        # Render the update template with the context
-        return render(request, 'notes/update.html', context)
+    # Render the update template with the context
+    return render(request, 'notes/update.html', context)
     
 # Create the delete view
 # This view will allow the user to delete a note
@@ -151,35 +157,38 @@ def update(request, pk):
 # This view will be protected by the login_required decorator
 @login_required(login_url='login')
 def delete(request, pk):
+    # try/except block to handle the case where the note does not exist
+    try:
+        # get the note by primary key
+        note = Note.objects.get(id=pk)
+        # Protect the view from non-superusers allowing for other apps to be accessed by non-superusers and also to request.user
+        if note.user != request.user and not request.user.is_superuser:
+            return redirect('')
         
-        # try/except block to handle the case where the note does not exist
-        try:
-            # get the note by primary key
-            note = Note.objects.get(id=pk)
-        except Note.DoesNotExist:
-            # If the note does not exist redirect to the history page
-            return redirect('history')
+    except Note.DoesNotExist:
+        # If the note does not exist redirect to the history page
+        return redirect('history')
         
-        # Check if the note user is not the current user
-        if note.user != request.user:
-            # If the note user is not the current user redirect to the history page
-            return redirect('history')
+    # Check if the note user is not the current user
+    if note.user != request.user:
+        # If the note user is not the current user redirect to the history page
+        return redirect('history')
         
-        # Check if the request method is POST
-        if request.method == 'POST':
+    # Check if the request method is POST
+    if request.method == 'POST':
             
-            # Delete the note
-            note.delete()
+        # Delete the note
+        note.delete()
             
-            # Redirect the user to the history page
-            return redirect('history')
+        # Redirect the user to the history page
+        return redirect('history')
         
-        # Context dictionary to pass the note to the template
-        context = {
-            'note': note,
-            'heading': 'Some things are better left unsaid',
-            'subheading': 'This can not be undone.',
-        }
+    # Context dictionary to pass the note to the template
+    context = {
+        'note': note,
+        'heading': 'Some things are better left unsaid',
+        'subheading': 'This can not be undone.',
+    }
         
-        # Render the delete template with the context
-        return render(request, 'notes/history.html')
+    # Render the delete template with the context
+    return render(request, 'notes/history.html')
