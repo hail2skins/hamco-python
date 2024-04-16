@@ -179,4 +179,8 @@ LOGIN_REDIRECT_URL = '/'
 # Override the default logout redirect
 LOGOUT_REDIRECT_URL = '/auth/login'
 
+# Mailjet settings/secrets
+MAILJET_API_KEY = env('MAILJET_API_KEY')
+MAILJET_API_SECRET = env('MAILJET_API_SECRET')
+
 
