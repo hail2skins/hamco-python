@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.db.models import Sum, Q, Count
+import csv
+from django.http import HttpResponse
 
 # import the login_required decorator
 from django.contrib.auth.decorators import login_required
@@ -38,6 +40,18 @@ def donor_list(request):
         donor_list = Donor.objects.annotate(
             total_contributions=Sum('contribution__amount')
         )
+        
+    # Check if the user wants to download the list as a CSV file
+    if 'download' in request.GET:
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': 'attachment; filename="donors.csv"'},
+        )
+        writer = csv.writer(response)
+        writer.writerow(['First Name', 'Last Name', 'Street Number', 'Street Name', 'City', 'State', 'Zip Code', 'Total Contributions'])
+        for donor in donor_list:
+            writer.writerow([donor.first_name, donor.last_name, donor.street_number, donor.street_name, donor.city, donor.state, donor.zip_code, donor.total_contributions or 0.00])
+        return response
 
     # Calculate total donors and total contributed from the filtered queryset
     total_donors = donor_list.count()

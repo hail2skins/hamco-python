@@ -10,9 +10,10 @@
         Total Contributed: ${{ total_contributed|floatformat:2 }}
     </div>
     
-    <form method="get" action="" class="mb-4">
+    <form method="get" action="">
         <input type="text" name="search" value="{{ search_query }}" placeholder="Enter names or zip codes (comma-separated)..." class="form-control">
         <button type="submit" class="btn btn-primary mt-2">Search</button>
+        <button type="submit" name="download" value="csv" class="btn btn-success mt-2">Download CSV</button>
     </form>
 
     <div class="table-responsive">
