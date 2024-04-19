@@ -11,20 +11,22 @@ from django.contrib.auth.decorators import login_required
 from .models import Donor
 
 # Create your views here.
-'''
-Donor List View
 
-This view will display a list of all donors in the database.
-`@login_required` is a decorator that will redirect the user to the login page if they are not authenticated.
-We also need to implement pagination to display the donors in pages.
-
-The Donor model has a relationship with the Contribution model, so we need to import both models.
-We need this list to display the donor's total contributions, so we need to fetch the contributions
-from the DB, and total them and then add to our template context.
-
-'''
+# Donor List View
 @login_required(login_url='login')
 def donor_list(request):
+    """
+    Donor List View
+
+    This view will display a list of all donors in the database.
+    @login_required` is a decorator that will redirect the user to the login page if they are not authenticated.
+    We also need to implement pagination to display the donors in pages.
+
+    The Donor model has a relationship with the Contribution model, so we need to import both models.
+    We need this list to display the donor's total contributions, so we need to fetch the contributions
+    from the DB, and total them and then add to our template context.
+    """
+
     search_query = request.GET.get('search', '')
     if search_query:
         # Allow zip codes to be entered as a comma-separated list
