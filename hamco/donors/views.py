@@ -63,9 +63,12 @@ def donor_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, 'donors/donor_list.html', {
+    # add context dictionary to pass to the template
+    context = {
         'page_obj': page_obj,
         'search_query': search_query,
         'total_donors': total_donors,
-        'total_contributed': total_contributed
-    })
+        'total_contributed': total_contributed,        
+    }
+    
+    return render(request, 'donors/donor_list.html', context)
