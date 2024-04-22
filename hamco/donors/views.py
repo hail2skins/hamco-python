@@ -39,19 +39,27 @@ def donor_list(request):
     if classification in ['L', 'R']:
         donor_queryset = donor_queryset.filter(contribution__entity__classification=classification).distinct()
         
+    # Handle an empty queryset
+    if not donor_queryset.exists():
+        context = {
+            'message': 'No donors found.',
+            'searcy_query': search_query,
+            'classification': classification,
+        }
+        return render(request, 'donors/donor_list.html', context)
+    
     
     # Apply the search filter if present
     if search_query:
         # Allow searching by zip code
         zip_codes = search_query.replace(' ', '').split(',')
-        donor_list = Donor.objects.filter(
+        donor_queryset = Donor.objects.filter(
             Q(first_name__icontains=search_query) | 
             Q(last_name__icontains=search_query) | 
             Q(zip_code__in=zip_codes)
         ).distinct()
         
-        
-     # Annotate the queryset   
+    # Annotate the queryset   
     donor_queryset = donor_queryset.annotate(
         total_contributions=Sum('contribution__amount'),
         most_recent_donation_year=ExtractYear(Max('contribution__date')),
@@ -63,15 +71,13 @@ def donor_list(request):
         )
     )
     
-    # Handle an empty queryset
-    if not donor_queryset.exists():
-        context = {
-            'message': 'No donors found.',
-            'searcy_query': search_query,
-            'classification': classification,
-        }
-        return render(request, 'donors/donor_list.html', context)
-    
+    # Before passing donor_queryset to the Paginator, order it to avoid warnings in the paginator
+    donor_queryset = donor_queryset.order_by('last_name', 'first_name')
+        
+    # Calculate total donors and total contributed from the filtered queryset
+    total_donors = donor_queryset.count()
+    total_contributed = donor_queryset.aggregate(total=Sum('total_contributions'))['total'] or 0      
+          
         
     # Check if the user wants to download the list as a CSV file
     if 'download' in request.GET:
@@ -81,16 +87,11 @@ def donor_list(request):
         )
         writer = csv.writer(response)
         writer.writerow(['First Name', 'Last Name', 'Street Number', 'Street Name', 'City', 'State', 'Zip Code', 'Total Contributions'])
-        for donor in donor_list:
+        for donor in donor_queryset:
             writer.writerow([donor.first_name, donor.last_name, donor.street_number, donor.street_name, donor.city, donor.state, donor.zip_code, donor.total_contributions or 0.00])
         return response
 
-    # Calculate total donors and total contributed from the filtered queryset
-    total_donors = donor_queryset.count()
-    total_contributed = donor_queryset.aggregate(total=Sum('total_contributions'))['total'] or 0
-
-    # Before passing donor_queryset to the Paginator, order it to avoid warnings in the paginator
-    donor_queryset = donor_queryset.order_by('last_name', 'first_name')
+    # Pagination the queryset
     paginator = Paginator(donor_queryset, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
