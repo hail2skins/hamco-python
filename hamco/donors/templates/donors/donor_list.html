@@ -11,9 +11,20 @@
     </div>
     
     <form method="get" action="">
+        <!-- Classification filter dropdown -->
+        <select name="classification" class="form-select mt-2">
+            <option value="">To best identify donors likely to contribute to your campaign, please select a political affiliation.</option>
+            <option value="L" {% if classification == "L" %}selected{% endif %}>Democratic (liberal)</option>
+            <option value="R" {% if classification == "R" %}selected{% endif %}>Republican (conservative)</option>
+        </select>
+        
+
+
         <input type="text" name="search" value="{{ search_query }}" placeholder="Enter names or zip codes (comma-separated)..." class="form-control">
         <button type="submit" class="btn btn-primary mt-2">Search</button>
         <button type="submit" name="download" value="csv" class="btn btn-success mt-2">Download CSV</button>
+
+    
     </form>
 
     <div class="table-responsive">
@@ -24,6 +35,8 @@
                     <th scope="col">Last Name</th>
                     <th scope="col">Address</th>
                     <th scope="col">Total Contributions</th>
+                    <th scope="col">Most Recent</th>
+                    <th scope="col">Candidate</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +46,8 @@
                     <td>{{ donor.last_name }}</td>
                     <td>{{ donor.full_address }}</td>
                     <td>${{ donor.total_contributions|default:"0.00" }}</td>
+                    <td>{{ donor.most_recent_donation_year }}</td>
+                    <td>{{ donor.recent_entity_last_name }}</td>
                 </tr>
                 {% empty %}
                 <tr>

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from django.db.models import Sum, Q, Count
+from django.db.models import Sum, Q, Count, Max, OuterRef, Subquery
+from django.db.models.functions import ExtractYear
 import csv
 from django.http import HttpResponse
 
@@ -8,7 +9,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 # Import your models
-from .models import Donor
+from .models import Donor, Contribution
 
 # Create your views here.
 
@@ -28,20 +29,49 @@ def donor_list(request):
     """
 
     search_query = request.GET.get('search', '')
+    classification = request.GET.get('classification', '')
+    
+    # Initiate the queryset so it's always defined
+    donor_queryset = Donor.objects.all()
+    
+    # Filter the queryset based on the classification if present
+    #print("Classification:", classification) # Debugging
+    if classification in ['L', 'R']:
+        donor_queryset = donor_queryset.filter(contribution__entity__classification=classification).distinct()
+        
+    
+    # Apply the search filter if present
     if search_query:
-        # Allow zip codes to be entered as a comma-separated list
+        # Allow searching by zip code
         zip_codes = search_query.replace(' ', '').split(',')
-        donor_list = Donor.objects.annotate(
-            total_contributions=Sum('contribution__amount')
-        ).filter(
+        donor_list = Donor.objects.filter(
             Q(first_name__icontains=search_query) | 
             Q(last_name__icontains=search_query) | 
             Q(zip_code__in=zip_codes)
         ).distinct()
-    else:
-        donor_list = Donor.objects.annotate(
-            total_contributions=Sum('contribution__amount')
+        
+        
+     # Annotate the queryset   
+    donor_queryset = donor_queryset.annotate(
+        total_contributions=Sum('contribution__amount'),
+        most_recent_donation_year=ExtractYear(Max('contribution__date')),
+        # Subquery to get the last name of the Entity associated with the most recent donation
+        recent_entity_last_name=Subquery(
+            Contribution.objects.filter(
+            donor=OuterRef('pk')
+            ).order_by('-date').values('entity__last_name')[:1]
         )
+    )
+    
+    # Handle an empty queryset
+    if not donor_queryset.exists():
+        context = {
+            'message': 'No donors found.',
+            'searcy_query': search_query,
+            'classification': classification,
+        }
+        return render(request, 'donors/donor_list.html', context)
+    
         
     # Check if the user wants to download the list as a CSV file
     if 'download' in request.GET:
@@ -56,10 +86,12 @@ def donor_list(request):
         return response
 
     # Calculate total donors and total contributed from the filtered queryset
-    total_donors = donor_list.count()
-    total_contributed = donor_list.aggregate(total=Sum('total_contributions'))['total'] or 0
+    total_donors = donor_queryset.count()
+    total_contributed = donor_queryset.aggregate(total=Sum('total_contributions'))['total'] or 0
 
-    paginator = Paginator(donor_list, 100)
+    # Before passing donor_queryset to the Paginator, order it to avoid warnings in the paginator
+    donor_queryset = donor_queryset.order_by('last_name', 'first_name')
+    paginator = Paginator(donor_queryset, 25)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -67,8 +99,9 @@ def donor_list(request):
     context = {
         'page_obj': page_obj,
         'search_query': search_query,
+        'classification': classification,
         'total_donors': total_donors,
-        'total_contributed': total_contributed,        
+        'total_contributed': total_contributed,    
     }
     
     return render(request, 'donors/donor_list.html', context)
