@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     # Add third party apps
     'crispy_forms',
     'crispy_bootstrap5',
+    'scout_apm.django' # Add Scout APM to the installed apps
+    
     # Add the website app to the installed apps
     'website',
     # Add the notes app to the installed apps
@@ -67,6 +69,11 @@ INSTALLED_APPS = [
 # Add the crispy_forms settings to the settings.py file
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Add the Scout APM settings to the settings.py file
+SCOUT_MONITOR = env.bool('SCOUT_MONITOR', default=False)
+SCOUT_KEY = env('SCOUT_KEY')
+SCOUT_NAME = env('SCOUT_NAME')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
