@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     # Add third party apps
     'crispy_forms',
     'crispy_bootstrap5',
-    'scout_apm.django' # Add Scout APM to the installed apps
+    'scout_apm.django', # Add Scout APM to the installed apps
     
     # Add the website app to the installed apps
     'website',
